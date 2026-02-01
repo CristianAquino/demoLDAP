@@ -9,6 +9,7 @@ import javax.naming.directory.Attribute;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.ModificationItem;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -34,12 +35,12 @@ public class LdapService {
 
     // Lee userAccountControl del usuario
     private Integer getUserAccountControl(String userDn) {
-        List<Integer> vals = ldapTemplate.lookup(userDn, new String[]{"userAccountControl"},
+        List<Integer> vals = Collections.singletonList(ldapTemplate.lookup(userDn, new String[]{"userAccountControl"},
                 (AttributesMapper<Integer>) attrs -> {
                     Attribute a = attrs.get("userAccountControl");
                     return (a != null) ? Integer.parseInt((String) a.get()) : 0;
-                });
-        return vals.isEmpty() ? 0 : vals.get(0);
+                }));
+        return 0;//vals.isEmpty() ? 0 : vals.get(0);
     }
 
     // Modifica userAccountControl aplicando máscara bitwise
